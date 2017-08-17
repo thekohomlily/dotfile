@@ -1,47 +1,75 @@
 syntax enable
 
-filetype plugin indent on 
+filetype plugin indent on
 
-set ignorecase
-set smartcase
-set incsearch
-set hlsearch
-set nowrap
+set encoding=utf-8
+set fileencoding=utf-8
+scriptencoding utf-8
 
 set number
 set ruler
 set list
 set listchars=tab:>-,trail:-,nbsp:%,extends:>,precedes:<,eol:<
+set incsearch
+set hlsearch
+set nowrap
+set showmatch
 set whichwrap=h,l
+set nowrapscan
+set ignorecase
+set smartcase
 set hidden
 set history=2000
-set tabstop=4
-set expandtab
-set shiftwidth=2
-set smarttab
 set autoindent
-set smartindent
-set backspace=indent,eol,start
-set nowrapscan
-set showmatch
-set matchpairs+=<:>
-set wildmenu wildmode=list:full
-set wildignore=.git,.hg,.svn
-set wildignore+=*.jpg,*.jpeg,*.bmp,*.gif,*.png
-set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest,*.so,*.out,*.class
-set wildignore+=*.swp,*.swo,*.swn
-set wildignore+=*.DS_Store
-set compatible
-set whichwrap=b,s,h,l,<,>,[,]
-set textwidth=0
+set expandtab
+set tabstop=2
+set shiftwidth=2
 set helplang=en
-set noswapfile
+
+set backspace=indent,eol,start
 set clipboard=unnamed,autoselect
 set display=lastline
-set pumheight=10
+set formatoptions-=r
+set formatoptions-=o
+set formatoptions-=v
+set matchpairs+=<:>
 set matchtime=1
+set noequalalways
+set nrformats=
+set pumheight=10
+set smartindent
+set smarttab
+set t_Co=256
+set textwidth=0
+set visualbell
+set wildmenu wildmode=list:full
+set wildignore=.git,.hg,.svn
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest,*.so,*.out,*.class
+set wildignore+=*.jpg,*.jpeg,*.bmp,*.gif,*.png
+set wildignore+=*.swp,*.swo,*.swn
+set wildignore+=*.DS_Store
+
+set laststatus=2
+set cmdheight=2
+set statusline=%F%m%r%h%w\%=[FORMAT=%{&ff}]\ [TYPE=%Y]\ [LOW=%l/%L]
+set virtualedit+=block
+set scrolloff=5
+set ttyfast
+set fileencodings=ucs-bom,utf-8,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932
+set fileformats=unix,dos,mac
+set cursorline
+"set cursorcolumn
+
+
 
 colorscheme desert
+
+
+"if s:bundled('altercation/vim-colors-solarized')
+"  colorscheme solarized
+"else
+"  colorscheme desert
+"endif
 
 nnoremap <Space>w  :<C-u>w<CR>
 nnoremap <Space>q  :<C-u>q<CR>
@@ -99,6 +127,7 @@ onoremap ir  i]
 onoremap ad  a"
 onoremap id  i"
 
+
 inoremap jk  <Esc>
 vnoremap jk  <Esc>
 
@@ -113,6 +142,4 @@ cnoremap <C-e>  <C-e>
 cnoremap <C-u> <C-e><C-u>
 cnoremap <C-v> <C-f>a
 
-
 " http://deris.hatenablog.jp/entry/2014/05/20/235807
-
