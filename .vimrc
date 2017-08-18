@@ -128,7 +128,7 @@ onoremap id  i"
 
 
 inoremap jk  <Esc>
-vnoremap jk  <Esc>
+"this is bug! vnoremap jk <Esc>
 
 nnoremap gs  :<C-u>%s///g<Left><Left><Left>
 vnoremap gs  :s///g<Left><Left><Left>
