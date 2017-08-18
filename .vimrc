@@ -12,7 +12,7 @@ function! s:plug.is_installed(name)
   return has_key(self.plugs, a:name) ? isdirectory(self.plugs[a:name].dir) : 0
 endfunction
 
-"check uninstall plugin and install
+"check not yet install plugin and auto install
 function! s:plug.check_installation()
   if empty(self.plugs)
     return
@@ -201,3 +201,64 @@ cnoremap <C-u> <C-e><C-u>
 cnoremap <C-v> <C-f>a
 
 " http://deris.hatenablog.jp/entry/2014/05/20/235807
+
+inoremap { {}<left>
+inoremap ( ()<left>
+inoremap [ []<left>
+
+
+"-------------------------------------------------------------------------------
+"plugin config neocomprete
+"http://qiita.com/hide/items/229ff9460e75426a2d07
+
+let g:acp_enableAtStartup = 0
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#enable_underbar_completion = 1
+let g:neocomplete#enable_camel_case_completion  =  1
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+let g:neocomplete#max_list = 15
+let g:neocomplete#auto_completion_start_length = 1
+let g:neocomplete#manual_completion_start_length = 3
+let g:neocomplete#max_keyword_width = 10000
+let g:neocomplete#sources#dictionary#dictionaries = {
+      \ 'default' : '',
+      \ 'scheme' : $HOME.'/.gosh_completions'
+      \ }
+
+if !exists('g:neocomplete#keyword_patterns')
+  let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+
+let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
+"autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+let g:neocomplete#sources#omni#input_patterns.c = '\%(\.\|->\)\h\w*'
+let g:neocomplete#sources#omni#input_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+let g:neocomplete#sources#omni#input_patterns.cs = '.*'
+let g:neocomplete#sources#omni#input_patterns.go = '\h\w\.\w*'
+
+"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ neocomplete#start_manual_complete()
+function! s:check_back_space() "{{{
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction "}}}
+"-------------------------------------------------------------------------------
