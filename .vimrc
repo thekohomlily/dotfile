@@ -25,7 +25,6 @@ set expandtab
 set tabstop=2
 set shiftwidth=2
 set helplang=en
-
 set backspace=indent,eol,start
 set clipboard=unnamed,autoselect
 set display=lastline
@@ -48,7 +47,6 @@ set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest,*.so,*.out,*.class
 set wildignore+=*.jpg,*.jpeg,*.bmp,*.gif,*.png
 set wildignore+=*.swp,*.swo,*.swn
 set wildignore+=*.DS_Store
-
 set laststatus=2
 set cmdheight=2
 set statusline=%F%m%r%h%w\%=[FORMAT=%{&ff}]\ [TYPE=%Y]\ [LOW=%l/%L]
@@ -60,10 +58,11 @@ set fileformats=unix,dos,mac
 set cursorline
 "set cursorcolumn
 
-
+if exists('&ambiwidth')
+  set ambiwidth=double
+endif
 
 colorscheme desert
-
 
 "if s:bundled('altercation/vim-colors-solarized')
 "  colorscheme solarized
