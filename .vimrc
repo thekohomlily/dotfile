@@ -1,3 +1,63 @@
+
+"===============================================================================
+let $DOTVIM=expand('~/.vim')
+let $VIMBUNDLE=$DOTVIM.'/bundle'
+
+"plugin information
+let s:plug = {
+      \ "plugs": get(g:, 'plugs', {})
+      \ }
+
+function! s:plug.is_installed(name)
+  return has_key(self.plugs, a:name) ? isdirectory(self.plugs[a:name].dir) : 0
+endfunction
+
+"check uninstall plugin and install
+function! s:plug.check_installation()
+  if empty(self.plugs)
+    return
+  endif
+  let list = []
+  for [name, spec] in items(self.plugs)
+    if !isdirectory(spec.dir)
+      call add(list, spec.uri)
+    endif
+  endfor
+  if len(list) > 0
+    let unplugged = map(list, 'substitute(v:val, "^.*github\.com/\\(.*/.*\\)\.git$", "\\1", "g")')
+
+    " Ask whether installing plugs like NeoBundle
+    echomsg 'Not installed plugs: ' . string(unplugged)
+    if confirm('Install plugs now?', "yes\nNo", 2) == 1
+      PlugInstall
+
+      " Close window for vim-plug
+      silent! close
+      " Restart vim
+      silent! !vim
+      quit!
+    endif
+
+  endif
+endfunction
+
+augroup check-plug
+  autocmd!
+  autocmd VimEnter * if !argc() | call s:plug.check_installation() | endif
+augroup END
+"===============================================================================
+"plugin control
+
+call plug#begin($VIMBUNDLE)
+
+Plug 'altercation/vim-colors-solarized'
+Plug 'Shougo/neocomplete.vim'
+Plug 'Shougo/unite.vim'
+
+call plug#end()
+
+"===============================================================================
+
 syntax enable
 
 filetype plugin indent on
@@ -62,13 +122,12 @@ if exists('&ambiwidth')
   set ambiwidth=double
 endif
 
-colorscheme desert
 
-"if s:bundled('altercation/vim-colors-solarized')
-"  colorscheme solarized
-"else
-"  colorscheme desert
-"endif
+if s:plug.is_installed("vim-colors-solarized")
+  colorscheme solarized
+else
+  colorscheme desert
+endif
 
 nnoremap <Space>w  :<C-u>w<CR>
 nnoremap <Space>q  :<C-u>q<CR>
