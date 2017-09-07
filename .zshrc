@@ -1,14 +1,16 @@
 #
 
+
 export LANG=ja_JP.UTF-8
 export VTE_CJK_WIDTH=1
 export TERM=xterm-256color
 
-#保管用のプラグイン
+#補完用のプラグイン
 if [ -e /usr/local/share/zsh-completions ]; then
   fpath=(/usr/local/share/zsh-completions $fpath)
 fi
 
+#色
 eval $(gdircolors /Users/angel/.zsh/dircolors-solarized/dircolors.ansi-dark)
 export LS_COLORS
 
@@ -23,6 +25,7 @@ zstyle ':completion:*:warnings' format '%F{RED}No matches for:''%F{YELLOW} %d'$D
 zstyle ':completion:*:descriptions' format '%F{YELLOW}completing %B%d%b'$DEFAULT
 zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:descriptions' format '%F{yellow}Completing %B%d%b%f'$DEFAULT
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' group-name ''
 
 zstyle ':completion:*' list-separator '-->'
@@ -74,11 +77,14 @@ setopt pushd_ignore_dups
 # PCRE 互換の正規表現を使う
 setopt re_match_pcre
 
+#区切り文字の設定
+autoload -U select-word-style
+select-word-style bash
+zstyle ':zle:*' word-chars " _-./;@"
+zstyle ':zle:*' word-style unspecified
+
 # プロンプトが表示されるたびにプロンプト文字列を評価、置換する
 setopt prompt_subst
-
-#保管候補を詰めて表示する
-setopt list_packed
 
 # プロンプト指定
 PROMPT="
@@ -89,6 +95,25 @@ PROMPT2='[?] > '
 
 SPROMPT="%{$fg[red]%}%{$suggest%}(*'~'%)? < もしかして %B%r%b %{$fg[red]%}かな? [そう!(y), 違う!(n),a,e]:${reset_color} "
 
+#git プロンプト
+autoload -Uz vcs_info
+setopt prompt_subst
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git:*' stagedstr "%F{yellow}!"
+zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
+zstyle ':vcs_info:*' formats "%F{green}%c%u[%b]%f"
+zstyle ':vcs_info:*' actionformats '[%b|%a]'
+precmd () { vcs_info }
+RPROMPT=$RPROMPT'${vcs_info_msg_0_}'
+
+#一般
+setopt list_packed
+setopt auto_cd
+
+bindkey -e
+bindkey '^o' autosuggest-accept
+
+
 
 alias sl='gls --color=auto'
 alias ls='gls --color=auto'
@@ -98,4 +123,8 @@ ssh-add -K ~/.ssh/github_thekohomlily >/dev/null 2>&1
 aizussh()
 {
     ssh -Y -C -l s1240198 sshgate.u-aizu.ac.jp
+}
+
+function cd(){
+    builtin cd $@ && ls;
 }
