@@ -1,5 +1,3 @@
-#
-
 
 export LANG=ja_JP.UTF-8
 export VTE_CJK_WIDTH=1
@@ -89,7 +87,7 @@ setopt prompt_subst
 # プロンプト指定
 PROMPT="
 %{${fg[yellow]}%}%~%{${reset_color}%}
-%(?.%{$fg[green]%}.%{$fg[blue]%})%(?!(*'-') <!(*;-;%)? <)%{${reset_color}%} "
+%(?.%{[38;5;006m%}.%{$fg[blue]%})%(?!(*'-') <!(*;-;%)? <)%{${reset_color}%} "
 
 PROMPT2='[?] > '
 
@@ -113,18 +111,34 @@ setopt auto_cd
 bindkey -e
 bindkey '^o' autosuggest-accept
 
+#コマンドのsyntax-highlight
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-
+#alias
 alias sl='gls --color=auto'
 alias ls='gls --color=auto'
 
 ssh-add -K ~/.ssh/github_thekohomlily >/dev/null 2>&1
 
-aizussh()
+#パス関連
+
+#goのパス
+if [ -x "`which go`" ]; then
+    export GOROOT=`go env GOROOT`
+    export GOPATH=$HOME/code/go
+    export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+#関数
+function aizussh()
 {
     ssh -Y -C -l s1240198 sshgate.u-aizu.ac.jp
 }
 
-function cd(){
+function cd()
+{
     builtin cd $@ && ls;
 }
