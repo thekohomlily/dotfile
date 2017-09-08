@@ -133,10 +133,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
 #関数
-function aizussh()
-{
-    ssh -Y -C -l s1240198 sshgate.u-aizu.ac.jp
-}
 
 function cd()
 {
